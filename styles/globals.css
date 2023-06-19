@@ -1,26 +1,113 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@layer base {
+    html {
+      font-family: Roboto,Proxima Nova, system-ui, sans-serif;
+    }
 
-* {
-  box-sizing: border-box;
-}
+    .w-s-i {
+        min-width: 100rem;
+    }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+    .w-s-i-l {
+        width: 50rem;
+    }
+
+    .w-s-i-r {
+        width: calc(100% - 50rem);
+    }
+
+    .max-w-64 {
+        max-width: 16rem;
+    }
+
+    .min-h-75 {
+        min-height: 18.75rem;
+    }
+
+    .h-px {
+        height: 1px;
+    }
+
+    .ml-68 {
+        margin-left: 17rem;
+    }
+
+    .z-990 {
+        z-index: 990;
+    }
+
+    .bg-transparent {
+        background-color: transparent;
+    }
+
+    .bg-gradient-to-r {
+        background-image: linear-gradient(to right, var(--tw-gradient-stops));
+    }
+
+    .from-transparent {
+        --tw-gradient-from: transparent;
+        --tw-gradient-to: rgb(0 0 0 / 0);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+
+    .to-transparent {
+        --tw-gradient-to: transparent;
+    }
+
+    .bg-blue-500\/13 {
+        background-color: rgb(94 114 228 / 0.13);
+    }
+
+    .checked\:bg-blue-500\/95:checked {
+        background-color: rgb(94 114 228 / 0.95);
+    }
+
+    .active\:bg-blue-500:active {
+        background-color: rgb(94 114 228 / 1);
+    }
+
+    .from-blue-700 {
+        --tw-gradient-from: #1171ef;
+        --tw-gradient-to: rgb(17 113 239 / 0);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+
+    .from-orange-500 {
+        --tw-gradient-from: #fb6340;
+        --tw-gradient-to: rgb(251 99 64 / 0);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+
+    .icon-dashboard-16::before {
+        content: url(../assets/icon/dashboard-blue-16.svg);
+        width: 16px;
+        height: 16px;
+    }
+    .icon-products-16::before {
+        content: url(../assets/icon/products-orange-16.svg);
+    }
+    .icon-stock-16::before {
+        content: url(../assets/icon/stock-green-16.svg);
+    }
+    .icon-history-16::before {
+        content: url(../assets/icon/history-cyen-16.svg);
+    }
+    .icon-report-16::before {
+        content: url(../assets/icon/report-red-16.svg);
+    }
+    .icon-profile-16::before {
+        content: url(../assets/icon/profile-blue-16.svg);
+    }
+    .icon-sign-in-16::before {
+        content: url(../assets/icon/sign-in-green-16.svg);
+    }
+    .icon-sign-up-16::before {
+        content: url(../assets/icon/sign-up-blue-16.svg);
+    }
+    .icon-logout-16::before {
+        content: url(../assets/icon/logout-red-16.svg);
+    }
 }
