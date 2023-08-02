@@ -89,28 +89,55 @@ const mockList = [
 export default function Home() {
 
     const [scanList, setScanList] = useState([]);
+    const [subQuantity, setSubQuantity] = useState(0);
+    const [discount, setDiscount] = useState(0);
+    const [tax, setTax] = useState(0);
+    const [total, setTotal] = useState(0);
 
-    useEffect( () => {
+    const hitung = () => {
+      const sum = scanList.reduce((current, obj) => {
+        return current + obj.amount * obj.quantity;
+      }, 0);
+      setTotal(sum)
+      setSubQuantity(sum)
+    }
+
+    useEffect(() => {
       setScanList(mockList);
-    })
+      hitung()
+    },[])
 
     const addQuantity = (id) => {
-      let newList = scanList
+      const newScanList = scanList.slice()
       const index = scanList.findIndex(list => list.id === id);
       if (index !== -1) {
-        newList[index].quantity++
-        setScanList(newList)
+        newScanList[index].quantity++
+        setScanList(newScanList)
+        hitung()
       } else {
         alert("something is wrong !!")
       }
     }
 
     const reduceQuantity = (id) => {
-      let newList = scanList
+      const newScanList = scanList.slice()
       const index = scanList.findIndex(list => list.id === id);
       if (index !== -1) {
-        newList[index].quantity--
-        setScanList(newList)
+        newScanList[index].quantity--
+        setScanList(newScanList)
+        hitung()
+      } else {
+        alert("something is wrong !!")
+      }
+    }
+
+    const handleOnChange = (id, val) => {
+      const newScanList = scanList.slice()
+      const index = scanList.findIndex(list => list.id === id);
+      if (index !== -1) {
+        newScanList[index].quantity = val
+        setScanList(newScanList)
+        hitung()
       } else {
         alert("something is wrong !!")
       }
@@ -125,12 +152,12 @@ export default function Home() {
                 <Scan className="mt-4"/>
               </div>
               <div className="w-full p-6 grid grid-cols-4 gap-4 mt-4">
-                  <Card className="pt-3" type="button" img="/icon/search-item.svg">Cek Draft</Card>
-                  <Card className="pt-3" type="button" img="/icon/cek-harga.svg">Cek Harga</Card>
-                  <Card className="pt-8" type="link" href="#" img="/icon/list.svg">List Product</Card>
-                  <Card className="pt-8" type="link" href="#" img="/icon/edit.svg">Update Stock</Card>
-                  <Card className="pt-8" type="link" href="#" img="/icon/history.svg">Penjualan</Card>
-                  <Card className="pt-8" type="link" href="#" img="/icon/laporan.svg">Report</Card>
+                  <Card key={0} className="pt-3" type="button" img="/icon/search-item.svg">Cek Draft</Card>
+                  <Card key={1} className="pt-3" type="button" img="/icon/cek-harga.svg">Cek Harga</Card>
+                  <Card key={2} className="pt-8" type="link" href="#" img="/icon/list.svg">List Product</Card>
+                  <Card key={3} className="pt-8" type="link" href="#" img="/icon/edit.svg">Update Stock</Card>
+                  <Card key={4} className="pt-8" type="link" href="#" img="/icon/history.svg">Penjualan</Card>
+                  <Card key={5} className="pt-8" type="link" href="#" img="/icon/laporan.svg">Report</Card>
               </div>
           </div>
           <div className="bg-white rounded-lg mt-8">
@@ -139,20 +166,20 @@ export default function Home() {
               <div className="section-price">
                 <div className="flex justify-between">
                   <p className="text-lg font-semibold">Sub quantity</p>
-                  <p className="text-lg font-semibold">Rp. 0</p>
+                  <p className="text-lg font-semibold">{FormatRupiah(subQuantity)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-lg font-semibold">Discount</p>
-                  <p className="text-lg font-semibold">Rp. 0</p>
+                  <p className="text-lg font-semibold">{FormatRupiah(discount)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-lg font-semibold">Tax</p>
-                  <p className="text-lg font-semibold">Rp. 0</p>
+                  <p className="text-lg font-semibold">{FormatRupiah(tax)}</p>
                 </div>
                 <hr className="mt-5 mb-5"/>
                 <div className="flex justify-between">
                   <p className="text-lg font-semibold">Total</p>
-                  <p className="text-lg font-semibold">Rp. 0</p>
+                  <p className="text-lg font-semibold">{FormatRupiah(total)}</p>
                 </div>
               </div>
 
@@ -165,7 +192,7 @@ export default function Home() {
           <div className="bg-white rounded-lg min-h-[793px] h-fit p-8">
             {
               scanList.map( (data) => {
-                return <ListScan key={data.id} data={data} addQuantity={addQuantity} reduceQuantity={reduceQuantity} />
+                return <ListScan key={data.id} data={data} addQuantity={addQuantity} reduceQuantity={reduceQuantity} handleOnChange={handleOnChange} />
               })
             }
           </div>
@@ -176,26 +203,29 @@ export default function Home() {
 }
 
 const ListScan = (props) => {
-
-  const {data} = props
+  
+  const onChange = (e) => {
+    if (e.target.validity.valid)
+    props.handleOnChange(props.data.id, e.target.value)
+  }
 
   return (
     <>
       <div className="flex justify-between items-center">
-        <div>
-          <p className="font-semibold text-md">{data.product}</p>
-          <p>{data.varian}</p>
+        <div className="w-80 min-w-fit">
+          <p className="font-semibold text-md">{props.data.product}</p>
+          <p>{props.data.varian}</p>
         </div>
         <div className="flex">
-          <Button className="rounded-full bg-blue-500 w-6 text-white" onClick={() => props.reduceQuantity(data.id)}>
+          <Button className="rounded-full bg-blue-500 w-6 text-white" onClick={() => props.reduceQuantity(props.data.id)}>
             <MinIcon className="stroke-2 w-full"/>
           </Button>
-          <input className="w-24 min-w-10 text-center outline-none" defaultValue={data.quantity}/>
-          <Button className="rounded-full bg-blue-500 w-6 text-white" onClick={() => props.addQuantity(data.id)}>
+          <input className="w-24 min-w-10 text-center outline-none" pattern="[0-9]*" onChange={onChange} value={props.data.quantity}/>
+          <Button className="rounded-full bg-blue-500 w-6 text-white" onClick={() => props.addQuantity(props.data.id)}>
             <PlusIcon className="stroke-2 w-full"/>
           </Button>
         </div>
-        <div className="font-semibold"> {FormatRupiah(data.amount * data.quantity)}</div>
+        <div className="font-semibold w-80 min-w-fit text-right"> {FormatRupiah(props.data.amount * props.data.quantity)}</div>
       </div>
 
       <hr className="my-2"/>
